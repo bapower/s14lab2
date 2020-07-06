@@ -1,12 +1,18 @@
 from flask import Flask, render_template
+import joblib
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    bestClassEver = 'Ross'
-    return render_template('index.html', bCE=bestClassEver)
+    linearRegression = joblib.load('./models/linearRegression.pkl')
+    decisionTree = joblib.load('./models/decisionTree.pkl')
+    linearRegressionPrediction = str(linearRegression.predict([[4, 2.5, 3005, 15, 17903.0, 1]])[0][0].round(1))
+    decisionTreePrediction = str(decisionTree.predict([[4, 2.5, 3005, 15, 17903.0, 1]])[0][0].round(1))
+    return (render_template('index.html', 
+    	linearRegressionPrediction = linearRegressionPrediction, 
+    	decisionTreePrediction = decisionTreePrediction))
 
 
 @app.route('/world')
